@@ -227,8 +227,6 @@ $(function(){
 					height: 16
 				})
 			.end()
-			.addSprite( "carot", $.extend({posx: 210, posy: 40}, animations.weapons.carot))
-			.addSprite( "corn", $.extend({posx: 230, posy: 40}, animations.weapons.corn))
 		.end()
 		;
 
