@@ -1,0 +1,102 @@
+#playground {
+	background-color: black;
+}
+
+.alien {
+}
+
+.shipShot {
+	background-color: green;
+}
+
+.alienShot {
+	background-color: red;
+}
+
+.weapon_bar {
+	height: 10px;
+	width: 100px;
+	position: absolute;
+	top: 5px;
+	background-color: black;
+}
+
+.weapon_level {
+	height: 8px;
+	position: relative;
+	margin: 1px;
+}
+.weapon_level.good {
+	background-color: green;
+}
+.weapon_level.middle {
+	background-color: yellow;
+}
+.weapon_level.bad {
+	background-color: red;
+}
+
+.life {
+	width: 32px;
+	height: 32px;
+	float: left;
+	background-image: url('../images/sprite.png');
+	background-position: 0px -16px;
+}
+
+/** SCOREBOARD**/
+
+.clock { 
+	background : transparent url("../images/font.png") no-repeat top left; 
+	height:32px; 
+	width:32px; 
+	float:left;
+}
+
+.clock.red {
+	background : transparent url("images/font-red.png") no-repeat top left; 
+}
+
+.clock.yellow {
+	background : transparent url("images/font-yellow.png") no-repeat top left; 
+}
+
+.clock.small {
+	position: relative;
+	top: 45%;
+	height: 16px;
+	width: 16px;
+}
+
+.n0 { 
+	background-position : 0px 0px;
+}
+.n1 { 
+	background-position : -32px 0px;
+}
+.n2 { 
+	background-position : -64px 0px;
+}
+.n3 { 
+	background-position : -96px 0px;
+}
+.n4 { 
+	background-position : -128px 0px;
+}
+.n5 { 
+	background-position : -160px 0px;
+}
+.n6 { 
+	background-position : -192px 0px;
+}
+.n7 { 
+	background-position : -224px 0px;
+}
+.n8 { 
+	background-position : -256px 0px;
+}
+.n9 { 
+	background-position : -288px 0px;
+}
+/** Scoreboard end **/
+
