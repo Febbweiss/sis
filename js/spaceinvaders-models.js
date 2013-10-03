@@ -16,7 +16,7 @@ WORLD.farm.bonus = [
 	},
 	{
 		type: "weapon",
-		clazz: CarotWeapon,
+		clazz: CornWeapon,
 		animation: WORLD.farm.weapons.corn
 	}
 ];
@@ -42,6 +42,7 @@ Weapon.prototype = {
 	directionY : 1,
 	animation : null,
 	clazz : "default",
+	callback : undefined,
 
 	fire : function() {
 		if (this.shot_timer || this.load <= 0) {
@@ -92,6 +93,36 @@ CarotWeapon.prototype = {
 		
 }
 heriter(CarotWeapon.prototype, Weapon.prototype);
+
+function CornWeapon() {
+	"use strict";
+	this.directionY = -1;
+	this.stock = 10;
+	this.clazz = "corn";
+	this.load = 1;
+	this.max_load = 1;
+	this.callback = function(shot) {
+		console.log( "CornWeapon.callback", this, shot );
+		var higherAlien = Math.max.apply( null, 
+			$(".alien").map(function() {
+				return $(this).y();
+			}).get() ),
+			lowerAlien = Math.min.apply( null, 
+			$(".alien").map(function() {
+				return $(this).y();
+			}).get() ),
+			mediumAlien = (higherAlien + lowerAlien) / 2;
+		
+		if( shot.y() < mediumAlien ) {
+			console.log( "KABOUM" );
+			shot.remove();
+		}
+	}
+}
+CornWeapon.prototype = {
+		
+}
+heriter(CornWeapon.prototype, Weapon.prototype);
 
 
 function AlienWeapon() {
@@ -350,7 +381,7 @@ Ship.prototype = {
 			this.weapon.stock--;
 			if( this.weapon.stock == 0 ) {
 				this.weapon = new HeroWeapon();
-				$("#current_weapon").setAnimation(bonus.animation);
+				$("#current_weapon").setAnimation(this.weapon.animation);
 			} 
 		}
 	}

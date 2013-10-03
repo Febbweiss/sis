@@ -22,7 +22,7 @@ var WAVES = [
 					this.y = (this.y + this.height / 4);
 				}
 			},
-			bonus : [50, 20]
+			bonus : [40, 20]
 		},
 		{
 			wave : [ [ 0, 0, 0, 0, 0, 0, 0 ], 
@@ -84,7 +84,7 @@ Game = {
 		if( !Game.running ) {
 			return false;
 		}
-		console.log( "Game.hit" );
+		
 		var health = Game.ship.hit();
 		$(".alienShot").remove();
 		$(".shipShot").remove();
@@ -192,40 +192,50 @@ Game = {
 		if( !Game.running ) {
 			return false;		
 		}
-
-		$(".shipShot").each(function(i,e) {
-			var posy = $(this).y();
+		
+		var shots = $(".shipShot");
+		if( shots.length == 0 ) {
+			return false;
+		}
+		
+		shots.each(function(i,e) {
+			var posy = $(this).y(),
+				weapon = $(this)[0].weapon;
 			if( posy < -$(this).height() ) {
 				this.remove();
 				return;
 			}
-			var weapon = $(this)[0].weapon;
 			$(this).y(weapon.directionY * weapon.speed, true);
 			$(this).x(weapon.directionX * weapon.speed, true);
-			var collisions = $(this).collision(".alien,."+$.gQ.groupCssClass);
-			collisions.each( function() {
-				var alien = $(this)[0];
-				var aliensNotInArray = $.grep( Game.aliens, function( elementOfArray, index) {
-					return elementOfArray.id == alien.id;
-				}, true);
-				Game.aliens = aliensNotInArray;
-				var alienX = alien.alien.x;
-				var alienY = alien.alien.y;
-				var alienWidth = alien.alien.width;
-				var alienHeight = alien.alien.height;
-				alien.alien.hit();
-				var remainingAliens = $(".alien").length;
-				if( remainingAliens == WAVES[Game.wave].bonus[0] || remainingAliens == WAVES[Game.wave].bonus[1] ) {
-					Game.bonus(alienX, alienY, alienWidth, alienHeight);					
-				}
-			})
-			if( collisions.length > 0 ) {
-				this.remove()
-			}
 			
-			if( Game.aliens.length == 0 ) {
-				Game.running = false;
-				Game.levelComplete();
+			if( weapon.callback ) {
+				weapon.callback($(this));
+			} else {
+				var collisions = $(this).collision(".alien,."+$.gQ.groupCssClass);
+				collisions.each( function() {
+					var alien = $(this)[0],
+						aliensNotInArray = $.grep( Game.aliens, function( elementOfArray, index) {
+						return elementOfArray.id == alien.id;
+						}, true);
+						alienX = alien.alien.x,
+						alienY = alien.alien.y,
+						alienWidth = alien.alien.width,
+						alienHeight = alien.alien.height;
+					Game.aliens = aliensNotInArray;
+					alien.alien.hit();
+					var remainingAliens = $(".alien").length;
+					if( remainingAliens == WAVES[Game.wave].bonus[0] || remainingAliens == WAVES[Game.wave].bonus[1] ) {
+						Game.bonus(alienX, alienY, alienWidth, alienHeight);					
+					}
+				})
+				if( collisions.length > 0 ) {
+					this.remove()
+				}
+			
+				if( Game.aliens.length == 0 ) {
+					Game.running = false;
+					Game.levelComplete();
+				}
 			}
 		});
 	},

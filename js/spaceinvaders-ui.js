@@ -21,8 +21,7 @@ var PLAYGROUND_WIDTH = 448,
 	ALIENS_WIDTH = 24,
 	ALIENS_HEIGHT = 17,
 
-	START_Y = 40,
-	IMAGES_PREFIX = "images/";
+	START_Y = 40;
 
 var SHIPS = {
   	scout: {width: 30, height: 25},
@@ -144,8 +143,8 @@ $(function(){
 	$.playground().registerCallback(Game.alienControl, REFRESH_RATE);
 	
 	// Collisions management
-	$.playground().registerCallback(Game.heroShotCollision, REFRESH_RATE);
 	$.playground().registerCallback(Game.bonusCollision, REFRESH_RATE);
+	$.playground().registerCallback(Game.heroShotCollision, REFRESH_RATE);
 	$.playground().registerCallback(Game.alienShotCollision, REFRESH_RATE);
 	
 	// Refresh playground
