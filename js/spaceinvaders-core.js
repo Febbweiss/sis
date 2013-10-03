@@ -11,31 +11,35 @@
 var WAVES = [
 		{
 			wave : [ [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ] ],
+				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ] ],
 			move : function() {
 				var offset = (PLAYGROUND_WIDTH - 16 * this.width) / 2;
 				if (Math.abs((this.getOriginX() - this.getX())) >= offset) {
 					this.directionX *= -1;
 					this.y = (this.y + this.height / 4);
 				}
-			}
+			},
+			bonus : [50, 20]
 		},
 		{
-			wave : [ [ 0, 0, 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0, 0, 0, 0 ],
-					[ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ] ],
+			wave : [ [ 0, 0, 0, 0, 0, 0, 0 ], 
+				 [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ] ],
 			move : function() {
 				var offset = (PLAYGROUND_WIDTH - 16 * this.width) / 2;
 				if (Math.abs((this.getOriginX() - this.getX())) >= offset) {
 					this.directionX *= -1;
 					this.y = (this.y + this.height / 4);
 				}
-			}
-		} ];
+			},
+			bonus : [30, 15]
+		} 
+	];
 
 Game = {
 	running : false,
@@ -46,6 +50,7 @@ Game = {
 	
 	init : function() {
 		"use strict";
+		animations = WORLD.farm;
 		Game.wave = Game.wave + 1;
 		var row, col;
 		var wave = WAVES[Game.wave].wave;
@@ -204,7 +209,15 @@ Game = {
 					return elementOfArray.id == alien.id;
 				}, true);
 				Game.aliens = aliensNotInArray;
-				$(this)[0].alien.hit();
+				var alienX = alien.alien.x;
+				var alienY = alien.alien.y;
+				var alienWidth = alien.alien.width;
+				var alienHeight = alien.alien.height;
+				alien.alien.hit();
+				var remainingAliens = $(".alien").length;
+				if( remainingAliens == WAVES[Game.wave].bonus[0] || remainingAliens == WAVES[Game.wave].bonus[1] ) {
+					Game.bonus(alienX, alienY, alienWidth, alienHeight);					
+				}
 			})
 			if( collisions.length > 0 ) {
 				this.remove()
@@ -215,6 +228,40 @@ Game = {
 				Game.levelComplete();
 			}
 		});
+	},
+
+	bonusCollision : function() {
+		if( !Game.running ) {
+			return false;		
+		}
+		
+		$(".bonus").each(function(i,e) {
+			var collisions = $(this).collision("#ship,."+$.gQ.groupCssClass);
+			var bonus = $(this)[0].bonus;
+			if( collisions.length > 0 ) {
+				if( bonus.type === "weapon" ) {
+					Game.ship.weapon = new bonus.clazz;
+					$("#current_weapon").setAnimation(bonus.animation.animation);
+					this.remove();
+				}
+			}
+		});
+	},
+
+
+	bonus : function(alienX, alienY, alienWidth, alienHeight) {
+		console.log( animations.bonus, animations.bonus.length - 1);
+		var bonus = animations.bonus[Math.round(Math.random() * (animations.bonus.length - 1)) ];
+		console.log("Bonus ", bonus, " pos ", alienX, " ", alienY, " ", alienWidth, " ", alienHeight);
+		var id = Math.round(Math.random() * 10000);
+		$("#actors").addSprite("bonus" + id, 
+			$.extend(
+				{
+					posx: alienX + (alienWidth - bonus.animation.width) / 2, 
+					posy: alienY 
+				}, bonus.animation));
+		$("#bonus" + id).addClass("bonus");
+		$("#bonus" + id)[0].bonus = bonus;
 	},
 	
 	alienShotCollision : function() {
@@ -236,7 +283,7 @@ Game = {
 				Game.hit();
 			})
 			if( collisions.length > 0 ) {
-				this.remove()
+				this.remove();
 			}
 		});
 	}

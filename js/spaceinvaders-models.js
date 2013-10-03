@@ -8,6 +8,19 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+WORLD.farm.bonus = [
+	{
+		type: "weapon",
+		clazz: CarotWeapon,
+		animation: WORLD.farm.weapons.carot
+	},
+	{
+		type: "weapon",
+		clazz: CarotWeapon,
+		animation: WORLD.farm.weapons.corn
+	}
+];
+
 /*** Weapons ***/
 
 function Weapon() {
@@ -16,6 +29,7 @@ function Weapon() {
 Weapon.prototype = {
 	speed : 5,
 	strength : 10,
+	stock: Infinity,
 	rof : 300,
 	ror : 1500,
 	load : 3,
@@ -27,6 +41,7 @@ Weapon.prototype = {
 	directionX : 0,
 	directionY : 1,
 	animation : null,
+	clazz : "default",
 
 	fire : function() {
 		if (this.shot_timer || this.load <= 0) {
@@ -64,6 +79,20 @@ HeroWeapon.prototype = {
 		
 }
 heriter(HeroWeapon.prototype, Weapon.prototype);
+
+function CarotWeapon() {
+	"use strict";
+	this.directionY = -1;
+	this.stock = 10;
+	this.clazz = "carot";
+	this.load = 1;
+	this.max_load = 1;
+}
+CarotWeapon.prototype = {
+		
+}
+heriter(CarotWeapon.prototype, Weapon.prototype);
+
 
 function AlienWeapon() {
 	"use strict";
@@ -153,9 +182,11 @@ Actor.prototype = {
 		var name = "shot" + Math.ceil(Math.random() * 1000);
 		if (this.weapon.fire(layout)) {
 			layout.addSprite(name, $.extend({ posx : this.x + this.node.w() / 2, posy : this.y + this.fireDirectionY * this.node.h()}, this.weapon));
-			$("#" + name).addClass(clazz)
+			$("#" + name).addClass(clazz).addClass(this.weapon.clazz);
 			$("#" + name)[0].weapon = this.weapon;
+			return true;
 		}
+		return false;
 	},
 	
 	hit : function() {
@@ -312,6 +343,16 @@ Ship.prototype = {
 			$("#hero").children().show();
 			_this.health = 1;
 		}, 2000);
+	}, 
+
+	fire : function() {
+		if(this._super("fire", arguments)) {
+			this.weapon.stock--;
+			if( this.weapon.stock == 0 ) {
+				this.weapon = new HeroWeapon();
+				$("#current_weapon").setAnimation(bonus.animation);
+			} 
+		}
 	}
 
 };

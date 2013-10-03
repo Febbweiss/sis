@@ -4,7 +4,7 @@ function heriter(destination, source) {
             obj["_super"] = function() { 
                 var methodName = arguments[0]; 
                 var parameters = arguments[1]; 
-                this["__parent_methods"][methodName].apply(this, parameters); 
+                return this["__parent_methods"][methodName].apply(this, parameters); 
             } 
         } 
      

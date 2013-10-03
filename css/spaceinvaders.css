@@ -19,6 +19,10 @@
 	background-color: green;
 }
 
+.shipShot.carot {
+	background-color: orange;
+}
+
 .alienShot {
 	background-color: red;
 }
