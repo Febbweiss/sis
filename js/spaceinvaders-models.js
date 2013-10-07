@@ -102,7 +102,6 @@ function CornWeapon() {
 	this.load = 1;
 	this.max_load = 1;
 	this.callback = function(shot) {
-		console.log( "CornWeapon.callback", this, shot );
 		var higherAlien = Math.max.apply( null, 
 			$(".alien").map(function() {
 				return $(this).y();
@@ -114,7 +113,6 @@ function CornWeapon() {
 			mediumAlien = (higherAlien + lowerAlien) / 2;
 		
 		if( shot.y() < mediumAlien ) {
-			console.log( "KABOUM" );
 			shot.remove();
 		}
 	}
