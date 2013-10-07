@@ -97,7 +97,7 @@ heriter(CarotWeapon.prototype, Weapon.prototype);
 function CornWeapon() {
 	"use strict";
 	this.directionY = -1;
-	this.stock = 10;
+	this.stock = 3;
 	this.clazz = "corn";
 	this.load = 1;
 	this.max_load = 1;
@@ -114,6 +114,25 @@ function CornWeapon() {
 		
 		if( shot.y() < mediumAlien ) {
 			shot.remove();
+			var shipShots = $("#shipShots");
+			for( var i = 0; i < 8; i++) {
+				var cos = Math.cos( (Math.PI / 4) * i ),
+					sin = Math.sin( (Math.PI / 4) * i);
+				if( Math.abs(cos) < 0.01 ) {
+					cos = 0;
+				}
+				if( Math.abs(sin) < 0.01) {
+					sin = 0;
+				}
+				shipShots.addSprite( "shotCorn" + i, { posx : shot.x() + 5 * cos, posy : shot.y() + 5 * sin, width: 2, height: 2});
+				var shotCorn = $("#shotCorn" + i);
+				shotCorn.addClass("shipShot").addClass("shotCorn");
+				$("#shotCorn" + i)[0].weapon = $.extend({
+						directionX : cos < 0 ? -1 : cos > 0 ? 1 : 0,
+						directionY : sin < 0 ? -1 : sin > 0 ? 1 : 0,
+						speed : 1
+					}, shot.weapon); 
+			}
 		}
 	}
 }

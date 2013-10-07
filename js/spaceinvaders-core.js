@@ -183,7 +183,7 @@ Game = {
 		$.each(Game.aliens, function(index, alien ) {
 			alien.move();
 			if( alien.health > 0 && Math.random() < alien.aggression ) {
-				alien.fire($("#aliensShots"), "alienShot");
+				//alien.fire($("#aliensShots"), "alienShot");
 			}
 		});
 	},
@@ -200,8 +200,10 @@ Game = {
 		
 		shots.each(function(i,e) {
 			var posy = $(this).y(),
+				posx = $(this).x(),
 				weapon = $(this)[0].weapon;
-			if( posy < -$(this).height() ) {
+				
+			if( posy < -$(this).height() || posy > PLAYGROUND_HEIGHT || posx < -$(this).width() || posx > PLAYGROUND_WIDTH ) {
 				this.remove();
 				return;
 			}

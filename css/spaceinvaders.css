@@ -23,6 +23,10 @@
 	background-color: orange;
 }
 
+.shipShot.shotCorn {
+	background-color: white;
+}
+
 .alienShot {
 	background-color: red;
 }
