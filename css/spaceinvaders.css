@@ -23,6 +23,10 @@
 	background-color: orange;
 }
 
+.shipShot.shotgun {
+	background-color: grey;
+}
+
 .shipShot.shotCorn {
 	background-color: white;
 }

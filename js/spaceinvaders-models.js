@@ -32,10 +32,10 @@ Weapon.prototype = {
 	stock: Infinity,
 	rof : 300,
 	ror : 1500,
-	load : 3,
-	max_load : 3,
+	load : 1,
+	max_load : 1,
 	width : 5,
-	height : 20,
+	height : 5,
 	shot_timer : false,
 	reload_timer : false,
 	directionX : 0,
@@ -72,22 +72,30 @@ Weapon.prototype = {
 
 }
 
-function HeroWeapon() {
+function ShotgunWeapon() {
 	"use strict";
 	this.directionY = -1;
+	this.rof = 200;
+	this.ror = 1500;
+	this.load = 2;
+	this.max_load = 2;
+	this.width = 3;
+	this.height = 3;
+	this.clazz = "Shotgun"
 }
-HeroWeapon.prototype = {
-		
+ShotgunWeapon.prototype = {
 }
-heriter(HeroWeapon.prototype, Weapon.prototype);
+heriter(ShotgunWeapon.prototype, Weapon.prototype);
 
 function CarotWeapon() {
 	"use strict";
 	this.directionY = -1;
 	this.stock = 10;
 	this.clazz = "carot";
-	this.load = 1;
-	this.max_load = 1;
+	this.load = 5;
+	this.max_load = 5;
+	this.width = 5;
+	this.height = 10;
 }
 CarotWeapon.prototype = {
 		
@@ -310,7 +318,7 @@ function Ship(id, start, speed, animation) {
 	this.x = start.x;
 	this.y = start.y;
 
-	this.weapon = new HeroWeapon();
+	this.weapon = new ShotgunWeapon();
 	this.fireDirectionY = -1;
 
 	this.originX = this.x;
@@ -397,7 +405,7 @@ Ship.prototype = {
 		if(this._super("fire", arguments)) {
 			this.weapon.stock--;
 			if( this.weapon.stock == 0 ) {
-				this.weapon = new HeroWeapon();
+				this.weapon = new ShotgunWeapon();
 				$("#current_weapon").setAnimation(this.weapon.animation);
 			} 
 		}
