@@ -183,7 +183,7 @@ Game = {
 		$.each(Game.aliens, function(index, alien ) {
 			alien.move();
 			if( alien.health > 0 && Math.random() < alien.aggression ) {
-				//alien.fire($("#aliensShots"), "alienShot");
+				alien.fire($("#aliensShots"), "alienShot");
 			}
 		});
 	},
