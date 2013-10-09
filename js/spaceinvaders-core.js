@@ -43,7 +43,8 @@ var WAVES = [
 
 Game = {
 	running : false,
-	wave : -1,
+	wave_index : -1,
+	wave : undefined,
 	aliens : [],
 	ship : null,
 	score : 0,
@@ -51,14 +52,16 @@ Game = {
 	init : function() {
 		"use strict";
 		animations = WORLD.farm;
-		Game.wave = Game.wave + 1;
-		var row, col;
-		var wave = WAVES[Game.wave].wave;
+		Game.wave_index = Game.wave_index + 1;
+		Game.wave = WAVES[Math.min(Game.wave_index, WAVES.length - 1)];
+		console.log(Game.wave_index, Game.wave);
+		var row, col, wave = Game.wave.wave;
+		
 		for (row = 0; row < wave.length; row = row + 1) {
 			var aliensRow = wave[row], type = aliensRow[0], offset = (PLAYGROUND_WIDTH - ((aliensRow.length - 1) * 0.5 + aliensRow.length)
 					* ALIENS_WIDTH) / 2;
 			for (col = 0; col < aliensRow.length; col = col + 1) {
-				Game.setAlien(col, row, offset, type, WAVES[Game.wave].move);
+				Game.setAlien(col, row, offset, type, Game.wave.move);
 			}
 		}
 
@@ -226,7 +229,7 @@ Game = {
 					Game.aliens = aliensNotInArray;
 					alien.alien.hit();
 					var remainingAliens = $(".alien").length;
-					if( remainingAliens == WAVES[Game.wave].bonus[0] || remainingAliens == WAVES[Game.wave].bonus[1] ) {
+					if( remainingAliens == Game.wave.bonus[0] || remainingAliens == Game.wave.bonus[1] ) {
 						Game.bonus(alienX, alienY, alienWidth, alienHeight);					
 					}
 				})
