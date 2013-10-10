@@ -9,7 +9,7 @@
 */
 
 (function($) {
-	function injector(t, splitter, klass, after) {
+	function injector(t, splitter, forceSmallParam) {
 		var a = t.text().split(splitter);
 		var html = "",
 		clazz = "clock",
@@ -20,7 +20,7 @@
 		lineSize,
 		letter, iLetter,
 		i, x, y
-		forceSmall = false;
+		forceSmall = false;//forceSmallParam ? forceSmallParam : false;
 		if( typeof customClazz != "undefined" ) {
 			clazz = " clock " + customClazz;
 		}
@@ -33,14 +33,14 @@
 						width += 16;
 						count = count + 1;
 					} else {
-						if( letter.charCodeAt(0) > 47 && letter.charCodeAt(0) < 58 ) {
+						if( letter.charCodeAt(0) > 47 && letter.charCodeAt(0) < 58 ) { // Numbers
 							letterSize = 32;
 							if( forceSmall ) {
 								letterSize = 16;
 							}
-							html += "<span class='" + clazz + (forceSmall ? "small" : "") + "' style='top: -50%;background-position: -" + ( parseInt( letter, null ) * letterSize) + "px -" + (forceSmall > -1 ? 128 : 0) +"px'></span>";
+							html += "<span class='" + clazz + (forceSmall ? "small" : "") + "' style='top: -50%;background-position: -" + ( parseInt( letter, null ) * letterSize) + "px -" + (forceSmall ? 128 : 0) +"px'></span>";
 							count = count + 1;
-						} else {
+						} else { // Letters
 							if( ( letter.charCodeAt(0) >= 'a'.charCodeAt(0) && letter.charCodeAt(0) <= 'z'.charCodeAt(0)) ) {
 								if( height < 16 ) {
 									height = 16;

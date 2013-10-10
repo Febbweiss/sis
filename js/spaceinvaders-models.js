@@ -394,6 +394,11 @@ Ship.prototype = {
 		$("#life" + this.lives).remove();
 		this.lives = this.lives - 1;
 		$("#hero").children().hide();
+		if( this.lives == 0 ) {
+			Game.game_over();
+			return true;
+		}
+		
 		var _this = this;
 		setTimeout(function() {
 			$("#hero").children().show();
@@ -403,6 +408,7 @@ Ship.prototype = {
 
 	fire : function() {
 		if(this._super("fire", arguments)) {
+			Game.shots.total = Game.shots.total + 1;
 			this.weapon.stock--;
 			if( this.weapon.stock == 0 ) {
 				this.weapon = new ShotgunWeapon();

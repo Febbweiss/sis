@@ -48,13 +48,18 @@ Game = {
 	aliens : [],
 	ship : null,
 	score : 0,
+	shots : {
+		total : 0,
+		lost : 0
+	},
 	
 	init : function() {
 		"use strict";
 		animations = WORLD.farm;
 		Game.wave_index = Game.wave_index + 1;
 		Game.wave = WAVES[Math.min(Game.wave_index, WAVES.length - 1)];
-		console.log(Game.wave_index, Game.wave);
+		Game.wave.score = 0;
+		
 		var row, col, wave = Game.wave.wave;
 		
 		for (row = 0; row < wave.length; row = row + 1) {
@@ -68,18 +73,36 @@ Game = {
 		SCOREBOARD.init();
 		SCOREBOARD.set_score( Game.score );
 		
+		$("#level").append(Game.wave_index + 1).lettering();
+		
 		Game.setShip();
 		
+		hideModal();
 		Game.running = true;
 	},
 
+	game_over : function() {
+		displayModal( {
+			end: "Loose",
+			score: Game.score
+		});
+	},
+	
 	levelComplete : function() {
 		"use strict";
 		Game.running = false;
+		var bonus = Math.round(((Game.shots.total - Game.shots.lost) / Game.shots.total) * Game.wave.score);
+		Game.addToScore(bonus);
+		
+		displayModal( {
+			bonus: bonus,
+			wave_score: Game.wave.score,
+			score: Game.score,
+		});
 
 		setTimeout(function() {
 			Game.init();
-		}, 3000);
+		}, 5000);
 	},
 	
 	hit : function() {
@@ -105,8 +128,7 @@ Game = {
 			}, 2000);
 		}
 		else {
-			GUI.drawText( $("#message"), game_over, true );
-			Game.show_game_over();
+			Game.game_over();
 		}
 	},
 	
@@ -140,6 +162,7 @@ Game = {
 	
 	addToScore : function( toAdd ) {
 		Game.score = Game.score + toAdd;
+		Game.wave.score = Game.wave.score + toAdd;
 		SCOREBOARD.add( toAdd );
 	},
 	
@@ -207,6 +230,7 @@ Game = {
 				weapon = $(this)[0].weapon;
 				
 			if( posy < -$(this).height() || posy > PLAYGROUND_HEIGHT || posx < -$(this).width() || posx > PLAYGROUND_WIDTH ) {
+				Game.shots.lost = Game.shots.lost + 1;
 				this.remove();
 				return;
 			}
@@ -265,9 +289,7 @@ Game = {
 
 
 	bonus : function(alienX, alienY, alienWidth, alienHeight) {
-		console.log( animations.bonus, animations.bonus.length - 1);
 		var bonus = animations.bonus[Math.round(Math.random() * (animations.bonus.length - 1)) ];
-		console.log("Bonus ", bonus, " pos ", alienX, " ", alienY, " ", alienWidth, " ", alienHeight);
 		var id = Math.round(Math.random() * 10000);
 		$("#actors").addSprite("bonus" + id, 
 			$.extend(
@@ -294,10 +316,10 @@ Game = {
 			$(this).y(weapon.directionY * weapon.speed, true);
 			$(this).x(weapon.directionX * weapon.speed, true);
 			var collisions = $(this).collision("#ship,."+$.gQ.groupCssClass);
-			collisions.each( function() {
-				Game.hit();
-			})
 			if( collisions.length > 0 ) {
+				collisions.each( function() {
+					Game.hit();
+				});
 				this.remove();
 			}
 		});

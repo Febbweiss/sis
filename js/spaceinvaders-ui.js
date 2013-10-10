@@ -8,10 +8,11 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-/*global jQuery, console */
+/*global jQuery */
 
 var PLAYGROUND_WIDTH = 448,
 	PLAYGROUND_HEIGHT = 544,
+	MODAL_WIDTH = 300,
 	REFRESH_RATE = 15,
 	HUD_HEIGHT = 70,
 
@@ -30,6 +31,40 @@ var SHIPS = {
 };
 
 var animations = WORLD.farm;
+
+function displayModal(data) {
+	$.playground()
+		.addGroup( "modal_pane", {width: MODAL_WIDTH, height: data.end ? 190 : 140, posx: (PLAYGROUND_WIDTH - MODAL_WIDTH ) /2, posy: (PLAYGROUND_HEIGHT - (140 ))/2})
+			.addSprite("scoreLbl", {width: 180, height: 32, posx: 10, posy: data.end ? 50 : 10})
+			.addSprite("scoreNbr", {width: 180, height: 32, posx: 200, posy: data.end ? 50 : 10})
+		.end();
+	if( data.end ) {
+		var width = (data.end.length - 1 ) * 16 + 32;
+		$("#modal_pane").addSprite("gameSt", {width: width, height: 32, posx: (MODAL_WIDTH - width) / 2, posy: 10});
+		$("#gameSt").append(data.end).lettering();
+	}
+	
+	if( data.bonus ) {
+		$("#modal_pane")
+			.addSprite("bonusLbl", {width: 180, height: 32, posx: 10, posy: data.end ? 90 : 50})
+			.addSprite("bonusNbr", {width: 180, height: 32, posx: 200, posy: data.end ? 90 : 50})
+			.addSprite("totalLbl", {width: 180, height: 32, posx: 10, posy: data.end ? 130 : 90})
+			.addSprite("totalNbr", {width: 180, height: 32, posx: 200, posy: data.end ? 130 : 90})
+			;
+		$("#bonusLbl").append("Bonus").lettering();
+		$("#bonusNbr").append(data.bonus).lettering();
+		$("#totalLbl").append("Wave score").lettering();
+		$("#totalNbr").append(data.wave_score).lettering();
+	}
+	
+	$("#modal_pane").addClass( "modal" );
+	$("#scoreLbl").append("Score").lettering();
+	$("#scoreNbr").append(data.score).lettering();
+}
+
+function hideModal() {
+	$("#modal_pane").remove();
+}
 
 function updateWeaponLoad( load ) {
 	"use strict";
@@ -107,7 +142,7 @@ $(function(){
 				.addSprite("life1", $.extend({posx: 64}, animations.life))
 			.end()
 			.addGroup("levelGrp", {
-				posx: PLAYGROUND_WIDTH - 6 * 32 + 16,
+				posx: PLAYGROUND_WIDTH - (6 * 32 + 16),
 				posy: 2,
 				width: 32 + 5 * 16,
 				height: 16
@@ -118,8 +153,7 @@ $(function(){
 				.addSprite("level", {
 					width : 64,
 					posx: 32 + 7 * 16,
-					posy: 16,
-					height: 16
+					height: 32
 				})
 			.end()
 		.end()
