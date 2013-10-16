@@ -21,6 +21,84 @@ WORLD.farm.bonus = [
 	}
 ];
 
+/*** Move ***/
+
+var MOVE = {
+	translation : {
+		init : function (x, y) {
+			return {directionX : 1, directionY : 0};
+		},
+		move : function() {
+			var offset = (PLAYGROUND_WIDTH - 16 * this.width) / 2;
+			if (Math.abs((this.getOriginX() - this.getX())) >= offset) {
+				this.directionX *= -1;
+				this.y = (this.y + this.height / 4);
+			}
+		
+		},
+	},
+	mirror : {
+		init : function(x, y) {
+			if( x < PLAYGROUND_WIDTH / 2 ) {
+				return {directionX: -1, directionY: 0};
+			}
+			return {directionX: 1, directionY: 0};
+		},
+		move : function() {
+			var offset =  this.width / 2;
+			if (Math.abs((this.getOriginX() - this.getX())) >= offset) {
+				this.directionX *= -1;
+				this.y = (this.y + this.height / 4);
+			}
+		
+		},
+	},
+	sinusoid : {
+		init : function (x, y) {
+			return {directionX : 1, directionY : 0};
+		},
+		move : function () {
+			var offsetX = (PLAYGROUND_WIDTH - 16 * this.width) / 2;
+			if (Math.abs((this.getOriginX() - this.getX())) >= offsetX) {
+				this.directionX *= -1;
+			}
+			var offsetY = 5 * ALIENS_HEIGHT;
+			if (Math.abs((this.getOriginY() - this.getY())) >= offsetY) {
+				this.directionY *= -1;
+			}
+		}
+	}
+};
+
+/*** Move - end ***/
+
+/*** Waves ***/
+
+var WAVES = [
+		{
+			wave : [ [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ],
+				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ],
+				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ],
+				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ],
+				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ], ],
+			move : MOVE.sinusoid,
+			bonus : [40, 20]
+		},
+		{
+			wave : [ [ Alien, Alien, Alien, undefined, Alien, Alien, Alien ], 
+				 [ Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien ],
+				 [ Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien, Alien ],
+				 [ Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien, Alien, Alien ],
+				 [ Alien, Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien, Alien, Alien ] ],
+			move : MOVE.mirror,
+			bonus : [30, 15]
+		} 
+	];
+
+
+/*** Waves - end ***/
+
+
 /*** Weapons ***/
 
 function Weapon() {

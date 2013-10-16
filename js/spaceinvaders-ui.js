@@ -46,15 +46,15 @@ function displayModal(data) {
 	
 	if( data.bonus ) {
 		$("#modal_pane")
-			.addSprite("bonusLbl", {width: 180, height: 32, posx: 10, posy: data.end ? 90 : 50})
-			.addSprite("bonusNbr", {width: 180, height: 32, posx: 200, posy: data.end ? 90 : 50})
 			.addSprite("totalLbl", {width: 180, height: 32, posx: 10, posy: data.end ? 130 : 90})
 			.addSprite("totalNbr", {width: 180, height: 32, posx: 200, posy: data.end ? 130 : 90})
+			.addSprite("bonusLbl", {width: 180, height: 32, posx: 10, posy: data.end ? 90 : 50})
+			.addSprite("bonusNbr", {width: 180, height: 32, posx: 200, posy: data.end ? 90 : 50})
 			;
+		$("#totalLbl").append("Wave").lettering();
+		$("#totalNbr").append(data.wave_score).lettering();
 		$("#bonusLbl").append("Bonus").lettering();
 		$("#bonusNbr").append(data.bonus).lettering();
-		$("#totalLbl").append("Wave score").lettering();
-		$("#totalNbr").append(data.wave_score).lettering();
 	}
 	
 	$("#modal_pane").addClass( "modal" );

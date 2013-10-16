@@ -8,39 +8,6 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-var WAVES = [
-		{
-			wave : [ [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ] ],
-			move : function() {
-				var offset = (PLAYGROUND_WIDTH - 16 * this.width) / 2;
-				if (Math.abs((this.getOriginX() - this.getX())) >= offset) {
-					this.directionX *= -1;
-					this.y = (this.y + this.height / 4);
-				}
-			},
-			bonus : [40, 20]
-		},
-		{
-			wave : [ [ 0, 0, 0, 0, 0, 0, 0 ], 
-				 [ 0, 0, 0, 0, 0, 0, 0, 0 ],
-				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-				 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ] ],
-			move : function() {
-				var offset = (PLAYGROUND_WIDTH - 16 * this.width) / 2;
-				if (Math.abs((this.getOriginX() - this.getX())) >= offset) {
-					this.directionX *= -1;
-					this.y = (this.y + this.height / 4);
-				}
-			},
-			bonus : [30, 15]
-		} 
-	];
-
 Game = {
 	running : false,
 	wave_index : -1,
@@ -66,7 +33,7 @@ Game = {
 			var aliensRow = wave[row], type = aliensRow[0], offset = (PLAYGROUND_WIDTH - ((aliensRow.length - 1) * 0.5 + aliensRow.length)
 					* ALIENS_WIDTH) / 2;
 			for (col = 0; col < aliensRow.length; col = col + 1) {
-				Game.setAlien(col, row, offset, type, Game.wave.move);
+				Game.setAlien(col, row, offset, aliensRow[col], Game.wave.move);
 			}
 		}
 
@@ -134,11 +101,17 @@ Game = {
 	
 	setAlien : function(x, y, offset, type, move) {
 		"use strict";
+		if( typeof type == "undefined" ) {
+			return;
+		}
 		var id = x * ROWS + y;
-		var alien = new Alien("alien" + id, {
+		var alien = new type("alien" + id, {
 			x : offset + x * ALIENS_WIDTH * 1.5,
 			y : START_Y + (y * 1.25 * ALIENS_HEIGHT)
-		}, move);
+		}, move.move);
+		var directions = move.init( alien.x, alien.y );
+		alien.directionX = directions.directionX;
+		alien.directionY = directions.directionY;
 		$("#actors").addSprite("alien" + id, $.extend({posx : alien.x, posy : alien.y}, animations.alien));
 		alien.node = $("#alien" + id);
 		alien.node.addClass("alien");
