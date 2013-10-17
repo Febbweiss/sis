@@ -24,12 +24,6 @@ var PLAYGROUND_WIDTH = 448,
 
 	START_Y = 40;
 
-var SHIPS = {
-  	scout: {width: 30, height: 25},
-  	bomber: {width: 30, height: 25},
-  	cruser: {width: 30, height: 25}
-};
-
 var animations = WORLD.farm;
 
 function displayModal(data) {
@@ -137,9 +131,9 @@ $(function(){
 				width: 100,
 				height: 32
 			})
-				.addSprite("life3", animations.life)
-				.addSprite("life2", $.extend({posx: 32}, animations.life))
-				.addSprite("life1", $.extend({posx: 64}, animations.life))
+				.addSprite("life2", animations.life)
+				.addSprite("life1", $.extend({posx: 32}, animations.life))
+				.addSprite("life0", $.extend({posx: 64}, animations.life))
 			.end()
 			.addGroup("levelGrp", {
 				posx: PLAYGROUND_WIDTH - (6 * 32 + 16),

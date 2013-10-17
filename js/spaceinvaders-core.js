@@ -77,13 +77,12 @@ Game = {
 		if( !Game.running ) {
 			return false;
 		}
-		
+
 		var health = Game.ship.hit();
 		$(".alienShot").remove();
 		$(".shipShot").remove();
 		$("#life" + Game.ship.lives).remove();
 		Game.running = false;
-		Game.ship.lives = Game.ship.lives - 1;
 		$("#hero").children().hide();
 		
 		if( Game.ship.lives > 0 ) {
@@ -120,7 +119,6 @@ Game = {
 	},
 
 	setShip : function() {
-		var type = SHIPS.scout;
 		Game.ship = new Ship("ship", {
 			x : $("#hero").x(),
 			y : $("#hero").y()
