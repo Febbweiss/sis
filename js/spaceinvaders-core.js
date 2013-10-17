@@ -40,7 +40,7 @@ Game = {
 		SCOREBOARD.init();
 		SCOREBOARD.set_score( Game.score );
 		
-		$("#level").append(Game.wave_index + 1).lettering();
+		updateLevel(Game.wave_index + 1);
 		
 		Game.setShip();
 		

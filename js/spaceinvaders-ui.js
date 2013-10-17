@@ -27,10 +27,11 @@ var PLAYGROUND_WIDTH = 448,
 var animations = WORLD.farm;
 
 function displayModal(data) {
+	var score = data.score.toString();
 	$.playground()
 		.addGroup( "modal_pane", {width: MODAL_WIDTH, height: data.end ? 190 : 140, posx: (PLAYGROUND_WIDTH - MODAL_WIDTH ) /2, posy: (PLAYGROUND_HEIGHT - (140 ))/2})
 			.addSprite("scoreLbl", {width: 180, height: 32, posx: 10, posy: data.end ? 50 : 10})
-			.addSprite("scoreNbr", {width: 180, height: 32, posx: 200, posy: data.end ? 50 : 10})
+			.addSprite("scoreNbr", {width: score.length * 32, height: 32, posx: (MODAL_WIDTH - 10 - score.length * 32), posy: data.end ? 50 : 10})
 		.end();
 	if( data.end ) {
 		var width = (data.end.length - 1 ) * 16 + 32;
@@ -39,21 +40,23 @@ function displayModal(data) {
 	}
 	
 	if( data.bonus ) {
+		var bonus = data.bonus.toString(),
+			total = data.wave_score.toString();
 		$("#modal_pane")
 			.addSprite("totalLbl", {width: 180, height: 32, posx: 10, posy: data.end ? 130 : 90})
-			.addSprite("totalNbr", {width: 180, height: 32, posx: 200, posy: data.end ? 130 : 90})
+			.addSprite("totalNbr", {width: total.length * 32, height: 32, posx: (MODAL_WIDTH - 10 - total.length * 32), posy: data.end ? 130 : 90})
 			.addSprite("bonusLbl", {width: 180, height: 32, posx: 10, posy: data.end ? 90 : 50})
-			.addSprite("bonusNbr", {width: 180, height: 32, posx: 200, posy: data.end ? 90 : 50})
+			.addSprite("bonusNbr", {width: bonus.length * 32, height: 32, posx: (MODAL_WIDTH - 10 - bonus.length * 32), posy: data.end ? 90 : 50})
 			;
 		$("#totalLbl").append("Wave").lettering();
-		$("#totalNbr").append(data.wave_score).lettering();
+		$("#totalNbr").append(total).lettering();
 		$("#bonusLbl").append("Bonus").lettering();
-		$("#bonusNbr").append(data.bonus).lettering();
+		$("#bonusNbr").append(bonus).lettering();
 	}
 	
 	$("#modal_pane").addClass( "modal" );
 	$("#scoreLbl").append("Score").lettering();
-	$("#scoreNbr").append(data.score).lettering();
+	$("#scoreNbr").append(score).lettering();
 }
 
 function hideModal() {
@@ -74,6 +77,14 @@ function updateWeaponLoad( load ) {
 		}
 	}
 	HTMLDiv.width( (load * 100) + "%" );
+}
+
+function updateLevel(level) {
+	var strLevel = level.toString();
+	var div = $("#level");
+	div.w(strLevel.length * 32);
+	div.x( PLAYGROUND_WIDTH  / 2 - 10 - strLevel.length * 32);
+	div.empty().append(strLevel).lettering();
 }
 
 $(function(){
@@ -136,13 +147,14 @@ $(function(){
 				.addSprite("life0", $.extend({posx: 64}, animations.life))
 			.end()
 			.addGroup("levelGrp", {
-				posx: PLAYGROUND_WIDTH - (6 * 32 + 16),
+				posx: PLAYGROUND_WIDTH / 2,
 				posy: 2,
-				width: 32 + 5 * 16,
+				width: PLAYGROUND_WIDTH / 2,
 				height: 16
 				})
 				.addSprite("levelLbl", {
-					width: 32 + 5 * 16
+					width: 32 + 5 * 16,
+					posx: 10
 				})
 				.addSprite("level", {
 					width : 64,
@@ -159,12 +171,6 @@ $(function(){
 	$("#scoreboard").addClass("scoreboard");
 	$("#subScoreboard").addClass("subScoreboard");
 	var hud = $("#hud");
-
-	/*  
-	hud.append("<div id='scoreMessage'></div>");
-	hud.append("<div id='message'></div>'");
-	hud.append("<div id='level'></div>'");
-	hud.append("<div id='levelNumber'></div>'");*/
 
 	// Controls
 	$.playground().registerCallback(Game.control, REFRESH_RATE);
