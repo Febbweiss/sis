@@ -58,12 +58,13 @@ Game = {
 	levelComplete : function() {
 		"use strict";
 		Game.running = false;
-		var bonus = Math.round(((Game.shots.total - Game.shots.lost) / Game.shots.total) * Game.wave.score);
+		var bonus = Math.round(((Game.shots.total - Game.shots.lost) / Game.shots.total) * Game.wave.score),
+			wave_score = Game.wave.score;
 		Game.addToScore(bonus);
 		
 		displayModal( {
 			bonus: bonus,
-			wave_score: Game.wave.score,
+			wave_score: wave_score,
 			score: Game.score,
 		});
 
