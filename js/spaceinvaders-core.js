@@ -10,7 +10,7 @@
 
 Game = {
 	running : false,
-	wave_index : -1,
+	wave_index : 0,
 	wave : undefined,
 	aliens : [],
 	ship : null,
@@ -180,8 +180,14 @@ Game = {
 
 		$.each(Game.aliens, function(index, alien ) {
 			alien.move();
+			var node = alien.node;
+			if( (node.y() + node.h()) > $("#hero").y() ) {
+				Game.running = false;
+				Game.game_over();
+				return false;
+			}
 			if( alien.health > 0 && Math.random() < alien.aggression ) {
-				alien.fire($("#aliensShots"), "alienShot");
+				//alien.fire($("#aliensShots"), "alienShot");
 			}
 		});
 	},
