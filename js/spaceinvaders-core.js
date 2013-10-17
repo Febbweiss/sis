@@ -10,7 +10,7 @@
 
 Game = {
 	running : false,
-	wave_index : 0,
+	wave_index : -1,
 	wave : undefined,
 	aliens : [],
 	ship : null,
