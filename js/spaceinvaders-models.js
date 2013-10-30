@@ -246,7 +246,7 @@ Weapon.prototype = {
 		
 		if( !this.reload_timer) {
 			this.reload_timer = setInterval( function() {
-				_this.load = Math.min(_this.load + 1, _this.max_load);
+				_this.load = Math.min(_this.load + 1, Math.min(_this.max_load, _this.stock));
 				if( _this.load == _this.max_load ) {
 					clearInterval(_this.reload_timer);
 					_this.reload_timer = false;
