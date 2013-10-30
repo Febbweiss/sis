@@ -8,6 +8,19 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+function getAliensMidHeight() {
+	var higherAlien = Math.max.apply( null, 
+		$(".alien").map(function() {
+			return $(this).y();
+		}).get() ),
+		lowerAlien = Math.min.apply( null, 
+		$(".alien").map(function() {
+			return $(this).y();
+		}).get() );
+		
+	return (higherAlien + lowerAlien) / 2;
+}
+
 WORLD.farm.bonus = [
 	{
 		type: "weapon",
@@ -34,7 +47,6 @@ var MOVE = {
 				this.directionX *= -1;
 				this.y = (this.y + this.height / 4);
 			}
-		
 		},
 	},
 	mirror : {
@@ -50,20 +62,89 @@ var MOVE = {
 				this.directionX *= -1;
 				this.y = (this.y + this.height / 4);
 			}
-		
 		},
 	},
-	sinusoid : {
+	half_part_rotation : {
 		init : function (x, y) {
-			return {directionX : 1, directionY : 0};
+			return {directionX:0, directionY:0};
 		},
 		move : function () {
-			var offsetX = (PLAYGROUND_WIDTH - 16 * this.width) / 2;
-			if (Math.abs((this.getOriginX() - this.getX())) >= offsetX) {
+			var 	_this = $(this)[0],
+				mid = PLAYGROUND_WIDTH / 2,
+				center = _this.center, 
+				width = _this.width;
+
+			if( this.directionX == 0 && this.directionY == 0 ) {
+				center = {x: ( this.getOriginX() < mid ? PLAYGROUND_WIDTH / 4 : 3 * PLAYGROUND_WIDTH / 4), y: getAliensMidHeight() };
+				width = distance(center, {x: this.x, y: this.y});
+				var	xAxis = {x: width, y: 0}, 
+					current = {x: center.x - this.getOriginX(), y: center.y - this.getOriginY()},
+					alpha = angle( xAxis, current );
+				this.directionX = 0.01;
+				this.directionY = alpha;
+				$(this)[0].center = center;
+				$(this)[0].width = width;
+			}
+				
+			if( this.getOriginX() < mid ) {
+				this.directionY = this.directionY + this.directionX;
+			} else {
+				this.directionY = this.directionY - this.directionX;
+			}
+			if( Math.abs(this.directionY) > 2 * Math.PI ) {
+				this.directionY = 0;
+			}
+			center.y = center.y + 0.1;
+			_this.center = center;
+			this.x = center.x + width * Math.cos(this.directionY);
+			this.y = center.y + width * Math.sin(this.directionY);
+		}
+	},
+
+	rotation : {
+		init : function (x, y) {
+			return {directionX:0, directionY:0};
+		},
+		move : function () {
+			var 	_this = $(this)[0],
+				mid = PLAYGROUND_WIDTH / 2,
+				center = _this.center, 
+				width = _this.width;
+
+			if( this.directionX == 0 && this.directionY == 0 ) {
+				center = {x: mid, y: getAliensMidHeight() };
+				width = distance(center, {x: this.x, y: this.y});
+				var	xAxis = {x: width, y: 0}, 
+					current = {x: center.x - this.getOriginX(), y: center.y - this.getOriginY()},
+					alpha = angle( xAxis, current );
+				this.directionX = 0.01;
+				this.directionY = alpha;
+				$(this)[0].center = center;
+				$(this)[0].width = width;
+			}
+				
+			this.directionY = this.directionY - this.directionX;
+			if( Math.abs(this.directionY) > 2 * Math.PI ) {
+				this.directionY = 0;
+			}
+			center.y = center.y + 0.1;
+			_this.center = center;
+			this.x = center.x + width * Math.cos(this.directionY);
+			this.y = center.y + width * Math.sin(this.directionY);
+		}
+	},
+	
+	sinusoid : {
+		init : function (x, y) {
+			return {directionX : 1, directionY : 1};
+		},
+		move : function () {
+			var offset = this.width / 2;
+			if (Math.abs((this.getOriginX() - this.getX())) >= offset) {
 				this.directionX *= -1;
 			}
-			var offsetY = 5 * ALIENS_HEIGHT;
-			if (Math.abs((this.getOriginY() - this.getY())) >= offsetY) {
+			
+			if( Math.abs(this.getOriginY() - this.getY()) >= 3 * this.height ) {
 				this.directionY *= -1;
 			}
 		}
@@ -80,8 +161,9 @@ var WAVES = [
 				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ],
 				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ],
 				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ],
-				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ], ],
-			move : MOVE.sinusoid,
+				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ]
+			],
+			move : MOVE.translation,
 			bonus : [40, 20]
 		},
 		{
@@ -89,10 +171,36 @@ var WAVES = [
 				 [ Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien ],
 				 [ Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien, Alien ],
 				 [ Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien, Alien, Alien ],
-				 [ Alien, Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien, Alien, Alien ] ],
+				 [ Alien, Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien, Alien, Alien ] 
+			],
 			move : MOVE.mirror,
 			bonus : [30, 15]
-		} 
+		}, 
+		{
+			wave : [ [ undefined, undefined, Alien, undefined, undefined, undefined, undefined, undefined, Alien, undefined, undefined ],
+				 [ undefined, Alien, Alien, Alien, undefined, undefined, undefined, Alien, Alien, Alien, undefined ],
+				 [ Alien, Alien, undefined, Alien, Alien, undefined, Alien, Alien, undefined, Alien, Alien ],
+				 [ undefined, Alien, Alien, Alien, Alien, undefined, undefined, Alien, Alien, Alien, undefined ],
+				 [ undefined, undefined, Alien, undefined, undefined, undefined, undefined, undefined, Alien, undefined, undefined ]
+			],
+			move : MOVE.half_part_rotation,
+			bonus : [20, 10]
+		},
+		{
+			wave : [ 
+				[ undefined, undefined, undefined, undefined, Alien, undefined, undefined, undefined, undefined ],
+				[ undefined, undefined, undefined, Alien, Alien, Alien, undefined, undefined, undefined ],
+				[ undefined, Alien, Alien, Alien, undefined, Alien, Alien, Alien, undefined ],
+				[ undefined, Alien, Alien, Alien, undefined, Alien, Alien, Alien, undefined ],
+				[ Alien, Alien, Alien, undefined, undefined, undefined, Alien, Alien, Alien ],
+				[ undefined, Alien, Alien, Alien, undefined, Alien, Alien, Alien, undefined ],
+				[ undefined, Alien, Alien, Alien, undefined, Alien, Alien, Alien, undefined ],
+				[ undefined, undefined, undefined, Alien, Alien, Alien, undefined, undefined, undefined ],
+				[ undefined, undefined, undefined, undefined, Alien, undefined, undefined, undefined, undefined ]
+			],
+			move : MOVE.rotation,
+			bonus : [25, 12]
+		}
 	];
 
 
@@ -188,15 +296,7 @@ function CornWeapon() {
 	this.load = 1;
 	this.max_load = 1;
 	this.callback = function(shot) {
-		var higherAlien = Math.max.apply( null, 
-			$(".alien").map(function() {
-				return $(this).y();
-			}).get() ),
-			lowerAlien = Math.min.apply( null, 
-			$(".alien").map(function() {
-				return $(this).y();
-			}).get() ),
-			mediumAlien = (higherAlien + lowerAlien) / 2;
+		var mediumAlien = getAliensMidHeight();
 		
 		if( shot.y() < mediumAlien ) {
 			shot.remove();
@@ -252,7 +352,7 @@ Actor.prototype = {
 	y : null,
 	originX : 0,
 	originY : 0,
-	speed : null,
+	speed : 0,
 	health : 1,
 	directionX : 0,
 	directionY : 0,
@@ -356,9 +456,6 @@ function Alien(id, start, move) {
 }
 
 Alien.prototype = {
-	speed : 0,
-	directionX : 0,
-	directionY : 0,
 	moveFct : null,
 	width : ALIENS_WIDTH,
 	height : ALIENS_HEIGHT,

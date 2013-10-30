@@ -30,10 +30,11 @@ Game = {
 		var row, col, wave = Game.wave.wave;
 		
 		for (row = 0; row < wave.length; row = row + 1) {
-			var aliensRow = wave[row], type = aliensRow[0], offset = (PLAYGROUND_WIDTH - ((aliensRow.length - 1) * 0.5 + aliensRow.length)
-					* ALIENS_WIDTH) / 2;
+			var 	aliensRow = wave[row], 
+				offset = (PLAYGROUND_WIDTH - ((aliensRow.length - 1) * 0.5 + aliensRow.length) * ALIENS_WIDTH) / 2;
+				
 			for (col = 0; col < aliensRow.length; col = col + 1) {
-				Game.setAlien(col, row, offset, aliensRow[col], Game.wave.move);
+				Game.setAlien(col, row, col * wave.length + row, offset, aliensRow[col], Game.wave.move);
 			}
 		}
 
@@ -99,12 +100,11 @@ Game = {
 		}
 	},
 	
-	setAlien : function(x, y, offset, type, move) {
+	setAlien : function(x, y, id, offset, type, move) {
 		"use strict";
 		if( typeof type == "undefined" ) {
 			return;
 		}
-		var id = x * ROWS + y;
 		var alien = new type("alien" + id, {
 			x : offset + x * ALIENS_WIDTH * 1.5,
 			y : START_Y + (y * 1.25 * ALIENS_HEIGHT)
@@ -187,7 +187,7 @@ Game = {
 				return false;
 			}
 			if( alien.health > 0 && Math.random() < alien.aggression ) {
-				//alien.fire($("#aliensShots"), "alienShot");
+				alien.fire($("#aliensShots"), "alienShot");
 			}
 		});
 	},
