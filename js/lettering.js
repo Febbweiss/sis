@@ -73,9 +73,6 @@
 	}
 	
 	$.fn.lettering = function() {
-		return injector( $(this), '', 'char', '' ); // always
-																			// pass
-																			// an
-																			// array
+		return injector( $(this), '', 'char', '' ); // always pass an array
 	};
 })(jQuery);
