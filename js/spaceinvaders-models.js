@@ -299,7 +299,11 @@ function CornWeapon() {
 		var mediumAlien = getAliensMidHeight();
 		
 		if( shot.y() < mediumAlien ) {
+			var explosion = EXPLOSIONS.SMALL[0];
+			$("#shipShots").addSprite("cornExplosion", {width: explosion.width, height: explosion.height, posx: shot.x() - explosion.width / 2, posy: shot.y() - explosion.height / 2});
+			explosionSmall($("#cornExplosion"), function() {$("#cornExplosion").remove()});
 			shot.remove();
+
 			var shipShots = $("#shipShots");
 			for( var i = 0; i < 8; i++) {
 				var cos = Math.cos( (Math.PI / 4) * i ),
@@ -573,7 +577,7 @@ Ship.prototype = {
 			Game.game_over();
 			return true;
 		}
-		
+
 		var _this = this;
 		setTimeout(function() {
 			$("#hero").children().show();

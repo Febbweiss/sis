@@ -186,7 +186,7 @@ Game = {
 				Game.game_over();
 				return false;
 			}
-			if( alien.health > 0 && Math.random() < alien.aggression ) {
+			if( alien.health > 0 && Math.random() < (alien.aggression * (Game.wave_index + 1)) ) {
 				alien.fire($("#aliensShots"), "alienShot");
 			}
 		});

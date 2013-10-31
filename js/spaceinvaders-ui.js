@@ -26,6 +26,25 @@ var PLAYGROUND_WIDTH = 448,
 
 var animations = WORLD.farm;
 
+
+function explose( div, explosion, step, callback ) {
+	if( step < explosion.length - 2 ) {
+		div.setAnimation( explosion[step].animation, function() {
+			explose( div, explosion, step + 1, callback );
+		}); 
+	} else {
+		div.setAnimation( explosion[step].animation, callback);
+	}
+};
+
+function explosionBig( div, callback ) {
+	explose(div, EXPLOSIONS.BIG, 0, callback );
+};
+
+function explosionSmall( div, callback ) {
+	explose(div, EXPLOSIONS.SMALL, 0, callback );
+};
+
 function displayModal(data) {
 	var score = data.score.toString();
 	$.playground()
@@ -107,6 +126,12 @@ $(function(){
 				posy: PLAYGROUND_HEIGHT - HUD_HEIGHT - 50
 			})
 			.end()
+			.addSprite("explosion", {
+				width: 64,
+				height: 64,
+				posx: 100,
+				posy: 100
+			})
 		.end()
 		.addGroup( "shipShots", {posx: 0, posy: HUD_HEIGHT, width: PLAYGROUND_WIDTH, height: PLAYGROUND_HEIGHT - HUD_HEIGHT})
 		.end()
