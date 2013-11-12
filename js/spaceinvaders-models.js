@@ -299,8 +299,10 @@ function CornWeapon() {
 		var mediumAlien = getAliensMidHeight();
 		
 		if( shot.y() < mediumAlien ) {
-			var explosion = EXPLOSIONS.SMALL[0];
-			$("#shipShots").addSprite("cornExplosion", {width: explosion.width, height: explosion.height, posx: shot.x() - explosion.width / 2, posy: shot.y() - explosion.height / 2});
+			var 	x = shot.x(),
+				y = shot.y(),
+				explosion = EXPLOSIONS.SMALL[0];
+			$("#shipShots").addSprite("cornExplosion", {width: explosion.width, height: explosion.height, posx: x - explosion.width / 2, posy: y - explosion.height / 2});
 			explosionSmall($("#cornExplosion"), function() {$("#cornExplosion").remove()});
 			shot.remove();
 
@@ -314,7 +316,7 @@ function CornWeapon() {
 				if( Math.abs(sin) < 0.01) {
 					sin = 0;
 				}
-				shipShots.addSprite( "shotCorn" + i, { posx : shot.x() + 5 * cos, posy : shot.y() + 5 * sin, width: 2, height: 2});
+				shipShots.addSprite( "shotCorn" + i, { posx : x + 5 * cos, posy : y + 5 * sin, width: 2, height: 2});
 				var shotCorn = $("#shotCorn" + i);
 				shotCorn.addClass("shipShot").addClass("shotCorn");
 				$("#shotCorn" + i)[0].weapon = $.extend({
@@ -541,27 +543,7 @@ Ship.prototype = {
 		"use strict";
 		this._super("move", arguments);
 	},
-
-/*	right : function(active) {
-		if( this.x + this.node.w() > PLAYGROUND_WIDTH ){
-			return false;
-		}
-		this._super("right", arguments);
-		
-		this.bigWheel.rotate(this.bigWheelAngle, true);
-		this.smallWheel.rotate(this.smallWheelAngle, true);
-	},
 	
-	left : function(active) {
-		if( this.x < 0 ){
-			return false;
-		}
-		this._super("left", arguments);
-		
-		this.bigWheel.rotate(this.bigWheelAngle, true);
-		this.smallWheel.rotate(this.smallWheelAngle, true);
-	},
-*/	
 	up : function(active) {
 		if (this.y < (PLAYGROUND_HEIGHT - 2 * HUD_HEIGHT)) {
 			return false;
@@ -570,20 +552,29 @@ Ship.prototype = {
 	},
 
 	destroy : function() {
+		var 	_this = this,
+			_hero = $("#hero"),
+			explosion = EXPLOSIONS.BIG;
+
 		$("#life" + this.lives).remove();
 		this.lives = this.lives - 1;
-		$("#hero").children().hide();
-		if( this.lives == 0 ) {
-			Game.game_over();
-			return true;
-		}
-
-		var _this = this;
-		setTimeout(function() {
-			$("#hero").children().show();
-			_this.health = 1;
-		}, 2000);
+		
+		$("#actors").addSprite("heroExplosion", 
+			{
+				width: explosion[0].width, 
+				height: explosion[0].height, 
+				posx: _hero.x() - explosion[0].width / 2 + _hero.w(), 
+				posy: _hero.y() - explosion[0].height / 2 - _hero.h() /4
+			}
+		);
+		explosionBig($("#heroExplosion"), function() {$("#heroExplosion").remove()});
+		_hero.children().hide();
 	}, 
+	
+	respawn : function() {
+		$("#heroExplosion").remove();
+		$("#hero").children().show();
+	},
 
 	fire : function() {
 		if(this._super("fire", arguments)) {

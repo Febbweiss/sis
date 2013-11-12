@@ -90,10 +90,9 @@ Game = {
 		if( Game.ship.lives > 0 ) {
 			var _this = Game.ship;
 			setTimeout(function() {
+				Game.ship.respawn();
 				Game.running = true;
-				$("#hero").children().show();
-				_this.health = 1;
-			}, 2000);
+			}, 5000);
 		}
 		else {
 			Game.game_over();
@@ -293,12 +292,14 @@ Game = {
 			var weapon = $(this)[0].weapon;
 			$(this).y(weapon.directionY * weapon.speed, true);
 			$(this).x(weapon.directionX * weapon.speed, true);
-			var collisions = $(this).collision("#ship,."+$.gQ.groupCssClass);
-			if( collisions.length > 0 ) {
-				collisions.each( function() {
+//			var collisions = $(this).collision("#ship,."+$.gQ.groupCssClass);
+			try {
+				var collisions = $(this).collision("#actors,#hero,#ship");
+				if( collisions.length > 0 ) {
 					Game.hit();
-				});
-				this.remove();
+					this.remove();
+				}
+			}catch(e) {
 			}
 		});
 	}
