@@ -8,9 +8,91 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-function Weapon() {
-	"use strict";
+var WEAPONS = {
+	SHOTGUN : {
+		directionY	: -1,
+		rof			: 200,
+		ror 		: 1500,
+		load 		: 2,
+		max_load 	: 2,
+		width 		: 3,
+		height 		: 3,
+		clazz 		: "Shotgun"	
+	},
+	CAROT : {
+		directionY 	: -1,
+		stock 		: 10,
+		clazz 		: "carot",
+		load 		: 5,
+		max_load	: 5,
+		width		: 5,
+		height		: 10
+	},
+	CORN : {
+		directionY	: -1,
+		stock 		: 3,
+		clazz 		: "corn",
+		load 		: 1,
+		max_load 	: 1,
+		callback 	: function(shot) {
+			var mediumAlien = getAliensMidHeight();
+			
+			if( shot.y() < mediumAlien ) {
+				var 	x = shot.x(),
+					y = shot.y(),
+					explosion = EXPLOSIONS.SMALL[0];
+				$("#shipShots").addSprite("cornExplosion", {width: explosion.width, height: explosion.height, posx: x - explosion.width / 2, posy: y - explosion.height / 2});
+				explosionSmall($("#cornExplosion"), function() {$("#cornExplosion").remove()});
+				shot.remove();
+
+				var shipShots = $("#shipShots");
+				for( var i = 0; i < 8; i++) {
+					var cos = Math.cos( (Math.PI / 4) * i ),
+						sin = Math.sin( (Math.PI / 4) * i);
+					if( Math.abs(cos) < 0.01 ) {
+						cos = 0;
+					}
+					if( Math.abs(sin) < 0.01) {
+						sin = 0;
+					}
+					shipShots.addSprite( "shotCorn" + i, { posx : x + 5 * cos, posy : y + 5 * sin, width: 2, height: 2});
+					var shotCorn = $("#shotCorn" + i);
+					shotCorn.addClass("shipShot").addClass("shotCorn");
+					$("#shotCorn" + i)[0].weapon = $.extend({
+							directionX : cos < 0 ? -1 : cos > 0 ? 1 : 0,
+							directionY : sin < 0 ? -1 : sin > 0 ? 1 : 0,
+							speed : 1
+						}, shot.weapon); 
+				}
+			}
+		}		
+	},
+	ALIEN : {
+		directionY	: 1,
+		width 		: 5,
+		height		: 10
+	}
 }
+
+function Weapon(type) {
+	"use strict";
+	this.directionY 	= type.directionY || 1;
+	this.directionX 	= type.directionX || 0;
+	this.width 			= type.width;
+	this.height 		= type.height;
+	this.speed 			= type.speed || 5;
+	this.strenght 		= type.strength || 10;
+	this.stock			= type.stock || Infinity;
+	this.rof 			= type.rof || 300;
+	this.ror 			= type.ror || 1500;
+	this.load 			= type.load || 1;
+	this.max_load 		= type.max_load || 1;
+	this.animation 		= type.animation;
+	this.clazz 			= type.clazz || "default";
+	this.callback 		= type.callback;
+
+}
+
 Weapon.prototype = {
 	speed : 5,
 	strength : 10,
@@ -56,90 +138,3 @@ Weapon.prototype = {
 	}
 
 }
-
-function ShotgunWeapon() {
-	"use strict";
-	this.directionY = -1;
-	this.rof = 200;
-	this.ror = 1500;
-	this.load = 2;
-	this.max_load = 2;
-	this.width = 3;
-	this.height = 3;
-	this.clazz = "Shotgun"
-}
-ShotgunWeapon.prototype = {
-}
-heriter(ShotgunWeapon.prototype, Weapon.prototype);
-
-function CarotWeapon() {
-	"use strict";
-	this.directionY = -1;
-	this.stock = 10;
-	this.clazz = "carot";
-	this.load = 5;
-	this.max_load = 5;
-	this.width = 5;
-	this.height = 10;
-}
-CarotWeapon.prototype = {
-		
-}
-heriter(CarotWeapon.prototype, Weapon.prototype);
-
-function CornWeapon() {
-	"use strict";
-	this.directionY = -1;
-	this.stock = 3;
-	this.clazz = "corn";
-	this.load = 1;
-	this.max_load = 1;
-	this.callback = function(shot) {
-		var mediumAlien = getAliensMidHeight();
-		
-		if( shot.y() < mediumAlien ) {
-			var 	x = shot.x(),
-				y = shot.y(),
-				explosion = EXPLOSIONS.SMALL[0];
-			$("#shipShots").addSprite("cornExplosion", {width: explosion.width, height: explosion.height, posx: x - explosion.width / 2, posy: y - explosion.height / 2});
-			explosionSmall($("#cornExplosion"), function() {$("#cornExplosion").remove()});
-			shot.remove();
-
-			var shipShots = $("#shipShots");
-			for( var i = 0; i < 8; i++) {
-				var cos = Math.cos( (Math.PI / 4) * i ),
-					sin = Math.sin( (Math.PI / 4) * i);
-				if( Math.abs(cos) < 0.01 ) {
-					cos = 0;
-				}
-				if( Math.abs(sin) < 0.01) {
-					sin = 0;
-				}
-				shipShots.addSprite( "shotCorn" + i, { posx : x + 5 * cos, posy : y + 5 * sin, width: 2, height: 2});
-				var shotCorn = $("#shotCorn" + i);
-				shotCorn.addClass("shipShot").addClass("shotCorn");
-				$("#shotCorn" + i)[0].weapon = $.extend({
-						directionX : cos < 0 ? -1 : cos > 0 ? 1 : 0,
-						directionY : sin < 0 ? -1 : sin > 0 ? 1 : 0,
-						speed : 1
-					}, shot.weapon); 
-			}
-		}
-	}
-}
-CornWeapon.prototype = {
-		
-}
-heriter(CornWeapon.prototype, Weapon.prototype);
-
-
-function AlienWeapon() {
-	"use strict";
-	this.directionY = 1;
-	this.width = 5;
-	this.height = 10;
-}
-AlienWeapon.prototype = {
-		
-}
-heriter(AlienWeapon.prototype, Weapon.prototype);

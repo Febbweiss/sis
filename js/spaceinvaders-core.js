@@ -256,7 +256,7 @@ Game = {
 			var bonus = $(this)[0].bonus;
 			if( collisions.length > 0 ) {
 				if( bonus.type === "weapon" ) {
-					Game.ship.weapon = new bonus.clazz;
+					Game.ship.weapon = new Weapon(bonus.clazz);
 					$("#current_weapon").setAnimation(bonus.animation.animation);
 					this.remove();
 				}

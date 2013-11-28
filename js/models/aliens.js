@@ -10,25 +10,25 @@
 
 var ALIENS = {
 	alien1 : {
-		health : 1,
-		weapon : AlienWeapon,
-		score : 5,
-		aggression : 0.0005,
-		animation : ALIENS_TYPE[0]
+		health 		: 1,
+		weapon 		: WEAPONS.ALIEN,
+		score 		: 5,
+		aggression 	: 0.0005,
+		animation 	: ALIENS_TYPE[0]
 	},
 	alien2 : {
-		health : 1,
-		weapon : AlienWeapon,
-		score : 10,
-		aggression : 0.001,
-		animation : ALIENS_TYPE[1]
+		health 		: 1,
+		weapon 		: WEAPONS.ALIEN,
+		score 		: 10,
+		aggression 	: 0.001,
+		animation 	: ALIENS_TYPE[1]
 	},
 	alien3 : {
-		health : 1,
-		weapon : AlienWeapon,
-		score : 20,
-		aggression : 0.0015,
-		animation : ALIENS_TYPE[2]
+		health 		: 1,
+		weapon 		: WEAPONS.ALIEN,
+		score 		: 20,
+		aggression 	: 0.0015,
+		animation 	: ALIENS_TYPE[2]
 	}
 }
 
@@ -42,7 +42,7 @@ function Alien(id, start, move, type) {
 	this.y = start.y;
 	this.moveFct = move;
 
-	this.weapon = new type.weapon();
+	this.weapon = new Weapon(type.weapon);
 	this.fireDirectionY = 1;
 
 	this.originX = this.x;
