@@ -30,11 +30,19 @@ Game = {
 		var row, col, wave = Game.wave.wave;
 		
 		for (row = 0; row < wave.length; row = row + 1) {
-			var 	aliensRow = wave[row], 
-				offset = (PLAYGROUND_WIDTH - ((aliensRow.length - 1) * 0.5 + aliensRow.length) * ALIENS_WIDTH) / 2;
-				
-			for (col = 0; col < aliensRow.length; col = col + 1) {
-				Game.setAlien(col, row, col * wave.length + row, offset, aliensRow[col], Game.wave.move);
+			var alien_width_avg = 0,
+				aliens_row = wave[row], 
+				offset = 0;
+
+			for (col = 0; col < aliens_row.length; col = col + 1) {
+				alien_width_avg = alien_width_avg + aliens_row[col].animation.width;
+			}
+
+			alien_width_avg = alien_width_avg / aliens_row.length;
+			offset = (PLAYGROUND_WIDTH - (aliens_row.length  * 1.5 - 0.5) * alien_width_avg) / 2;
+
+			for (col = 0; col < aliens_row.length; col = col + 1) {
+				Game.setAlien(col, row, col * wave.length + row, offset, aliens_row[col], Game.wave.move);
 			}
 		}
 
