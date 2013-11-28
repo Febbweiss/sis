@@ -143,36 +143,36 @@ var WAVES = [
 			bonus : [40, 20]
 		},
 		{
-			wave : [ [ Alien, Alien, Alien, undefined, Alien, Alien, Alien ], 
-				 [ Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien ],
-				 [ Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien, Alien ],
-				 [ Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien, Alien, Alien ],
-				 [ Alien, Alien, Alien, Alien, Alien, undefined, Alien, Alien, Alien, Alien, Alien ] 
+			wave : [ [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ], 
+				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ],
+				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ],
+				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ],
+				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ] 
 			],
 			move : MOVE.mirror,
 			bonus : [30, 15]
 		}, 
 		{
-			wave : [ [ undefined, undefined, Alien, undefined, undefined, undefined, undefined, undefined, Alien, undefined, undefined ],
-				 [ undefined, Alien, Alien, Alien, undefined, undefined, undefined, Alien, Alien, Alien, undefined ],
-				 [ Alien, Alien, undefined, Alien, Alien, undefined, Alien, Alien, undefined, Alien, Alien ],
-				 [ undefined, Alien, Alien, Alien, Alien, undefined, undefined, Alien, Alien, Alien, undefined ],
-				 [ undefined, undefined, Alien, undefined, undefined, undefined, undefined, undefined, Alien, undefined, undefined ]
+			wave : [ [ undefined, undefined, ALIENS.alien1, undefined, undefined, undefined, undefined, undefined, ALIENS.alien1, undefined, undefined ],
+				 [ undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, undefined, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined ],
+				 [ ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1 ],
+				 [ undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined ],
+				 [ undefined, undefined, ALIENS.alien1, undefined, undefined, undefined, undefined, undefined, ALIENS.alien1, undefined, undefined ]
 			],
 			move : MOVE.half_part_rotation,
 			bonus : [20, 10]
 		},
 		{
 			wave : [ 
-				[ undefined, undefined, undefined, undefined, Alien, undefined, undefined, undefined, undefined ],
-				[ undefined, undefined, undefined, Alien, Alien, Alien, undefined, undefined, undefined ],
-				[ undefined, Alien, Alien, Alien, undefined, Alien, Alien, Alien, undefined ],
-				[ undefined, Alien, Alien, Alien, undefined, Alien, Alien, Alien, undefined ],
-				[ Alien, Alien, Alien, undefined, undefined, undefined, Alien, Alien, Alien ],
-				[ undefined, Alien, Alien, Alien, undefined, Alien, Alien, Alien, undefined ],
-				[ undefined, Alien, Alien, Alien, undefined, Alien, Alien, Alien, undefined ],
-				[ undefined, undefined, undefined, Alien, Alien, Alien, undefined, undefined, undefined ],
-				[ undefined, undefined, undefined, undefined, Alien, undefined, undefined, undefined, undefined ]
+				[ undefined, undefined, undefined, undefined, ALIENS.alien1, undefined, undefined, undefined, undefined ],
+				[ undefined, undefined, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, undefined, undefined ],
+				[ undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined ],
+				[ undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined ],
+				[ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, undefined, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ],
+				[ undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined ],
+				[ undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined ],
+				[ undefined, undefined, undefined, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, undefined, undefined, undefined ],
+				[ undefined, undefined, undefined, undefined, ALIENS.alien1, undefined, undefined, undefined, undefined ]
 			],
 			move : MOVE.rotation,
 			bonus : [25, 12]
