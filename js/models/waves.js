@@ -125,7 +125,7 @@ var WAVES = [
 			wave : [ 
 				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ],
 				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ],
-				 [ ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3 ],
+				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ],
 				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ],
 				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ]
 			],
