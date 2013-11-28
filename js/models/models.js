@@ -153,15 +153,41 @@ var MOVE = {
 
 /*** Move - end ***/
 
+var ALIENS = {
+	alien1 : {
+		health : 1,
+		weapon : AlienWeapon,
+		score : 5,
+		aggression : 0.0005,
+		animation : ALIENS_TYPE[0]
+	},
+	alien2 : {
+		health : 1,
+		weapon : AlienWeapon,
+		score : 10,
+		aggression : 0.001,
+		animation : ALIENS_TYPE[1]
+	},
+	alien3 : {
+		health : 1,
+		weapon : AlienWeapon,
+		score : 20,
+		aggression : 0.0015,
+		animation : ALIENS_TYPE[2]
+	}
+}
+
+
 /*** Waves ***/
 
 var WAVES = [
 		{
-			wave : [ [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ],
-				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ],
-				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ],
-				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ],
-				 [ Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien, Alien ]
+			wave : [ 
+				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ],
+				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ],
+				 [ ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3, ALIENS.alien3 ],
+				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ],
+				 [ ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1, ALIENS.alien1 ]
 			],
 			move : MOVE.translation,
 			bonus : [40, 20]
@@ -444,7 +470,7 @@ Actor.prototype = {
 };
 
 /*** Actors - Aliens ***/
-function Alien(id, start, move) {
+function Alien(id, start, move, type) {
 	"use strict";
 
 	this.id = id;
@@ -452,20 +478,28 @@ function Alien(id, start, move) {
 	this.y = start.y;
 	this.moveFct = move;
 
-	this.weapon = new AlienWeapon();
+	this.weapon = new type.weapon();
 	this.fireDirectionY = 1;
 
 	this.originX = this.x;
 	this.originY = this.y;
 	this.directionX = -1;
 	this.speed = 0.5;
+	this.animation = type.animation;
+	this.width = type.animation.width;
+	this.height = type.animation.height;
+	this.health = type.health;
+	this.aggression = type.aggression;
+	this.score = type.score;
 }
 
 Alien.prototype = {
 	moveFct : null,
-	width : ALIENS_WIDTH,
-	height : ALIENS_HEIGHT,
-	aggression : 0.0005,
+	width : 0,
+	height : 0,
+	aggression : 0,
+	animation : null,
+	score : 0,
 
 	init : function() {
 		"use strict";
@@ -484,7 +518,7 @@ Alien.prototype = {
 	
 	destroy : function() {
 		this._super("destroy", arguments);
-		Game.addToScore( 5 );
+		Game.addToScore( this.score );
 	}
 };
 

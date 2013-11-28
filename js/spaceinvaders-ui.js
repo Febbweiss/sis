@@ -126,6 +126,9 @@ $(function(){
 				posy: PLAYGROUND_HEIGHT - HUD_HEIGHT - 50
 			})
 			.end()
+			.addSprite("alienA", $.extend({posx : 50, posy : 300}, ALIENS[0]))
+			.addSprite("alienB", $.extend({posx : 50, posy : 400}, ALIENS[1]))
+			.addSprite("alienC", $.extend({posx : 50, posy : 500}, ALIENS[2]))
 			.addSprite("explosion", {
 				width: 64,
 				height: 64,
@@ -190,6 +193,9 @@ $(function(){
 		.end()
 		;
 
+		$("#alienA").addClass("alien");
+		$("#alienB").addClass("alien");
+		$("#alienC").addClass("alien");
 	$("#ground").css("background-color", "brown");
 	$("#levelLbl").append("Level").lettering();
 	$("#level").append("0").lettering();

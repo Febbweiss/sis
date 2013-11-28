@@ -104,14 +104,14 @@ Game = {
 		if( typeof type == "undefined" ) {
 			return;
 		}
-		var alien = new type("alien" + id, {
-			x : offset + x * ALIENS_WIDTH * 1.5,
-			y : START_Y + (y * 1.25 * ALIENS_HEIGHT)
-		}, move.move);
+		var alien = new Alien("alien" + id, {
+			x : offset + x * type.animation.width * 1.5,
+			y : START_Y + (y * 1.25 * type.animation.height)
+		}, move.move, type);
 		var directions = move.init( alien.x, alien.y );
 		alien.directionX = directions.directionX;
 		alien.directionY = directions.directionY;
-		$("#actors").addSprite("alien" + id, $.extend({posx : alien.x, posy : alien.y}, animations.alien));
+		$("#actors").addSprite("alien" + id, $.extend({posx : alien.x, posy : alien.y}, alien.animation));
 		alien.node = $("#alien" + id);
 		alien.node.addClass("alien");
 		$("#alien" + id)[0].alien = alien;
