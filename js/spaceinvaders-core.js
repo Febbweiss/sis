@@ -35,7 +35,7 @@ Game = {
 				offset = 0;
 
 			for (col = 0; col < aliens_row.length; col = col + 1) {
-				var current_width = typeof aliens_row[col] !== "undefined" ? aliens_row[col].animation.width : ALIENS_TYPE[2].width
+				var current_width = typeof aliens_row[col] !== "undefined" ? aliens_row[col].animation.width : ALIENS_TYPE[2].width;
 				alien_width_avg = alien_width_avg + current_width;
 			}
 
@@ -43,7 +43,7 @@ Game = {
 			offset = (PLAYGROUND_WIDTH - (aliens_row.length  * 1.5 - 0.5) * alien_width_avg) / 2;
 
 			for (col = 0; col < aliens_row.length; col = col + 1) {
-				Game.setAlien(col, row, offset, aliens_row[col], Game.wave.move);
+				Game.setAlien(col, row, offset, alien_width_avg, aliens_row[col], Game.wave.move);
 			}
 		}
 
@@ -108,14 +108,14 @@ Game = {
 		}
 	},
 	
-	setAlien : function(x, y, offset, type, move) {
+	setAlien : function(x, y, offset, width, type, move) {
 		"use strict";
 		if( typeof type === "undefined" ) {
 			return;
 		}
 		var id = Game.aliens.length + 1, 
 			alien = new Alien("alien" + id, {
-				x : offset + x * type.animation.width * 1.5,
+				x : offset + x * width * 1.5,
 				y : START_Y + (y * 1.25 * type.animation.height)
 			}, move.move, type),
 			directions = move.init( alien.x, alien.y );
