@@ -216,6 +216,7 @@ Game = {
 				posx = $(this).x(),
 				weapon = $(this)[0].weapon;
 				
+			// Lost shots
 			if( posy < -$(this).height() || posy > PLAYGROUND_HEIGHT || posx < -$(this).width() || posx > PLAYGROUND_WIDTH ) {
 				Game.shots.lost = Game.shots.lost + 1;
 				this.remove();
@@ -227,23 +228,24 @@ Game = {
 			if( weapon.callback ) {
 				weapon.callback($(this));
 			} else {
+				// Shots collisions
 				var collisions = $(this).collision(".alien,."+$.gQ.groupCssClass);
 				collisions.each( function() {
 					var alien = $(this)[0],
-						aliensNotInArray = $.grep( Game.aliens, function( elementOfArray, index) {
-						return elementOfArray.id == alien.id;
-						}, true);
 						alienX = alien.alien.x,
 						alienY = alien.alien.y,
 						alienWidth = alien.alien.width,
 						alienHeight = alien.alien.height;
-					Game.aliens = aliensNotInArray;
+					
 					alien.alien.hit();
+					Game.aliens = $.grep( Game.aliens, function( elementOfArray, index) {
+								return elementOfArray.health == 0 && elementOfArray.id == alien.id;
+							}, true);
 					var remainingAliens = $(".alien").length;
 					if( remainingAliens == Game.wave.bonus[0] || remainingAliens == Game.wave.bonus[1] ) {
 						Game.bonus(alienX, alienY, alienWidth, alienHeight);					
 					}
-				})
+				});
 				if( collisions.length > 0 ) {
 					this.remove()
 				}

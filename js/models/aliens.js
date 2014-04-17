@@ -17,14 +17,14 @@ var ALIENS = {
 		animation 	: ALIENS_TYPE[0]
 	},
 	alien2 : {
-		health 		: 1,
+		health 		: 2,
 		weapon 		: WEAPONS.ALIEN,
 		score 		: 10,
 		aggression 	: 0.001,
 		animation 	: ALIENS_TYPE[1]
 	},
 	alien3 : {
-		health 		: 1,
+		health 		: 3,
 		weapon 		: WEAPONS.ALIEN,
 		score 		: 20,
 		aggression 	: 0.0015,
