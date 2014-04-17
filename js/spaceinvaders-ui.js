@@ -193,9 +193,6 @@ $(function(){
 		.end()
 		;
 
-		$("#alienA").addClass("alien");
-		$("#alienB").addClass("alien");
-		$("#alienC").addClass("alien");
 	$("#ground").css("background-color", "brown");
 	$("#levelLbl").append("Level").lettering();
 	$("#level").append("0").lettering();
