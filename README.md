@@ -15,6 +15,7 @@ There are currently 3 different weapons :
 + a corn-grenade
 
 A demo is available [here](https://febbweiss.github.io/games/Space_invaders_stories/)
+
 Credits
 ===
 + Graphics : Fabrice Ecaille aka Febbweiss
